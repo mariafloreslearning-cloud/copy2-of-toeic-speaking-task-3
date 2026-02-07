@@ -258,7 +258,7 @@
     .btnPrimary{ background: var(--primary); color:#fff; }
     .btnPrimary:hover{ background: var(--primaryHover); }
 
-    /* ✅ Stop button same as Writing (solid red) */
+    /* Stop button (solid red, like writing) */
     .btnDanger{ background:#ef4444; color:#fff; }
     .btnDanger:hover{ background:#dc2626; }
 
@@ -285,7 +285,7 @@
       background:#fafafa;
     }
 
-    /* ✅ Bottom buttons like Writing (outline style) */
+    /* Bottom buttons like Writing (outline style) */
     .bottomActions{
       margin-top: 10px;
       display:flex;
@@ -524,7 +524,6 @@
             <div class="statusLine">Listen to your take:</div>
             <audio id="player" controls></audio>
 
-            <!-- ✅ Same as Writing -->
             <div class="bottomActions">
               <a id="downloadBtn" class="btnOutline" href="#" aria-disabled="true">⬇️ Download current take</a>
               <a id="returnBtn" class="btnOutline btnOutlineReturn" href="#">↩️ Return to the module</a>
@@ -554,11 +553,8 @@
   </div>
 
   <script>
-    /***********************
-     * IndexedDB persistence
-     ***********************/
     const DB_NAME = "toeic_recorder_db_task3";
-    const DB_VERSION = 2; // ✅ store durationSec
+    const DB_VERSION = 2;
     const STORE = "takes";
 
     function openDB(){
@@ -609,9 +605,6 @@
       });
     }
 
-    /***********************
-     * UI + Recorder
-     ***********************/
     const startBtn  = document.getElementById("start");
     const stopBtn   = document.getElementById("stop");
     const resetBtn  = document.getElementById("reset");
@@ -694,7 +687,6 @@
       player.load();
 
       downloadBtn.setAttribute("aria-disabled","true");
-      downloadBtn.removeAttribute("download");
       downloadBtn.href = "#";
 
       keepBtn.disabled = true;
@@ -751,7 +743,6 @@
         return;
       }
       downloadBtn.setAttribute("aria-disabled","false");
-      // keep href dummy; we handle click with blob download for consistent filenames
       downloadBtn.href = "#";
     }
 
@@ -771,40 +762,12 @@
       const savedWhen = createdAt ? new Date(createdAt).toLocaleString() : "";
       const dur = fmtDuration(durationSec);
 
-      // ✅ Like Writing: duration + saved date/time
       label.innerHTML =
         `<strong>Take ${takeNumber}</strong> ` +
         `<span class="tag">• ${dur}${savedWhen ? ` • saved ${savedWhen}` : ""}</span>`;
 
       const actions = document.createElement("div");
       actions.className = "savedActions";
-
-      // (Optional but useful) Restore
-      const restoreBtn = document.createElement("a");
-      restoreBtn.href = "#";
-      restoreBtn.className = "linkBtn";
-      restoreBtn.textContent = "↩️ Restore";
-      restoreBtn.onclick = (e) => {
-        e.preventDefault();
-
-        // Put it in the main player + enable download
-        if(currentUrl) URL.revokeObjectURL(currentUrl);
-        currentUrl = URL.createObjectURL(blob);
-        currentBlob = blob;
-        player.src = currentUrl;
-
-        // show the saved duration in the timer (not running)
-        stopTimer();
-        seconds = Number.isFinite(durationSec) ? durationSec : 0;
-        setTimer(seconds);
-
-        setDownloadEnabled(currentBlob);
-        keepBtn.disabled = true;   // already saved
-        resetBtn.disabled = false;
-
-        statusEl.textContent = `Take ${takeNumber} restored.`;
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      };
 
       const downloadA = document.createElement("a");
       downloadA.className = "linkBtn";
@@ -822,10 +785,9 @@
         URL.revokeObjectURL(savedUrl);
         item.remove();
         statusEl.textContent = "Take removed.";
-        await loadSavedTakes(); // renumber + empty message
+        await loadSavedTakes();
       };
 
-      actions.appendChild(restoreBtn);
       actions.appendChild(downloadA);
       actions.appendChild(removeBtn);
 
@@ -847,7 +809,6 @@
       const takes = await getAllTakesFromDB();
       takes.sort((a,b) => (a.createdAt || 0) - (b.createdAt || 0));
 
-      // ✅ Like Writing: empty message
       if(takes.length === 0){
         const empty = document.createElement("div");
         empty.className = "statusLine";
@@ -859,7 +820,6 @@
       takes.forEach((t, idx) => savedList.appendChild(renderSavedTake(t, idx + 1)));
     }
 
-    // Init
     resetUI();
     loadSavedTakes().catch(() => {});
 
@@ -946,7 +906,6 @@
 
     resetBtn.onclick = () => resetUI();
 
-    // ✅ Outline "Download current take"
     downloadBtn.addEventListener("click", (e) => {
       e.preventDefault();
       if(!currentBlob) return;
@@ -974,7 +933,7 @@
         await addTakeToDB({ blob: currentBlob, durationSec: seconds });
         await loadSavedTakes();
 
-        statusEl.textContent = "Take saved. Click Start recording for a new attempt, or restore another take.";
+        statusEl.textContent = "Take saved. Click Start recording for a new attempt.";
         keepBtn.disabled = true;
         setState("done");
       } catch(err){

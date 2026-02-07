@@ -442,6 +442,17 @@
       flex-wrap:wrap;
       justify-content:flex-end;
     }
+    /* Card footer pinned bottom-right */
+.cardFooter{
+  display:flex;
+  justify-content:flex-end;
+  padding: 10px 18px 0;
+}
+
+/* Optional: keep spacing consistent with Writing task */
+.cardFooter button{
+  margin-top: 4px;
+}
   </style>
 </head>
 
@@ -529,6 +540,7 @@
 
             <div class="bottomActions">
               <a id="downloadBtn" class="btnOutline" href="#" aria-disabled="true">⬇️ Download current take</a>
+            <div class="cardFooter"> 
               <a id="returnBtn" class="btnOutline btnOutlineReturn" href="#">↩️ Return to the module</a>
             </div>
           </div>

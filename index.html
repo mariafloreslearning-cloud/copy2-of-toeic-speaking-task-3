@@ -72,7 +72,7 @@
 
     .section{ padding: 18px; }
 
-    /* Prompt block */
+    /* Prompt */
     .prompt{
       border:1px solid var(--accentBorder);
       background: linear-gradient(0deg, rgba(231,240,255,.55), rgba(231,240,255,.55)), #fff;
@@ -147,7 +147,7 @@
       color:#1f3b7a;
     }
 
-    /* --- Question blocks (grey label) --- */
+    /* Question blocks */
     .qBlock{
       border:1px solid var(--border);
       border-radius: var(--radius);
@@ -197,7 +197,7 @@
       border-radius: 12px;
     }
 
-    /* Controls panel */
+    /* Panel */
     .panel{
       margin-top: 14px;
       border:1px solid var(--border);
@@ -258,7 +258,7 @@
     .btnPrimary{ background: var(--primary); color:#fff; }
     .btnPrimary:hover{ background: var(--primaryHover); }
 
-    /* Stop button (solid red, like writing) */
+    /* Stop button (solid red like Writing) */
     .btnDanger{ background:#ef4444; color:#fff; }
     .btnDanger:hover{ background:#dc2626; }
 
@@ -285,17 +285,15 @@
       background:#fafafa;
     }
 
-    /* Bottom buttons: Download left, Return pushed to far right */
-.bottomActions{
-  margin-top: 10px;
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  align-items:center;
-}
-.bottomActions .btnOutlineReturn{
-  margin-left: auto;   /* ✅ pushes it to the far right */
-}
+    /* Bottom action buttons inside audioBlock */
+    .bottomActions{
+      margin-top: 10px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+
     .btnOutline{
       display:inline-flex;
       align-items:center;
@@ -318,6 +316,14 @@
       opacity:.55;
       cursor:not-allowed;
       pointer-events:none;
+    }
+
+    /* ✅ This is the IMPORTANT part: Return button anchored bottom-right of the card content */
+    .cardFooter{
+      display:flex;
+      justify-content:flex-end;
+      margin-top: 10px;
+      padding-top: 2px;
     }
     .btnOutlineReturn{
       border-color:#a5b4fc;
@@ -406,7 +412,7 @@
     }
     .dangerLink:hover{ background:#ffecec; }
 
-    /* Modal overlay */
+    /* Modal */
     .overlay{
       position:fixed;
       inset:0;
@@ -442,17 +448,6 @@
       flex-wrap:wrap;
       justify-content:flex-end;
     }
-    /* Card footer pinned bottom-right */
-.cardFooter{
-  display:flex;
-  justify-content:flex-end;
-  padding: 10px 18px 0;
-}
-
-/* Optional: keep spacing consistent with Writing task */
-.cardFooter button{
-  margin-top: 4px;
-}
   </style>
 </head>
 
@@ -466,6 +461,7 @@
     <div class="card">
       <div class="section">
 
+        <!-- Prompt -->
         <section class="prompt" id="promptBox" aria-labelledby="promptTitle">
           <div class="promptInner">
             <div class="promptHead">
@@ -498,7 +494,7 @@
               </audio>
               <div class="questionText">
                 <span class="questionIcon" aria-hidden="true">💬</span>
-                <span>What do you usually during on lunch break?</span>
+                <span>What do you usually do during your lunch break?</span>
               </div>
             </div>
 
@@ -521,6 +517,7 @@
           </div>
         </section>
 
+        <!-- Controls -->
         <section class="panel" aria-label="Recording controls">
           <div class="metaRow">
             <div class="timerChip"><span class="timer" id="timer">00:00</span></div>
@@ -540,13 +537,18 @@
 
             <div class="bottomActions">
               <a id="downloadBtn" class="btnOutline" href="#" aria-disabled="true">⬇️ Download current take</a>
-            <div class="cardFooter"> 
-              <a id="returnBtn" class="btnOutline btnOutlineReturn" href="#">↩️ Return to the module</a>
             </div>
           </div>
+
+          <!-- ✅ Return button OUTSIDE the audio block, pinned bottom-right -->
+          <div class="cardFooter">
+            <a id="returnBtn" class="btnOutline btnOutlineReturn" href="#">↩️ Return to the module</a>
+          </div>
         </section>
+
       </div>
 
+      <!-- Saved takes -->
       <div class="saved">
         <div class="savedHead">
           <h3>Saved takes</h3>
@@ -557,6 +559,7 @@
     </div>
   </div>
 
+  <!-- Return modal -->
   <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <div class="modal">
       <h3 id="modalTitle">Return to the module</h3>
@@ -568,6 +571,9 @@
   </div>
 
   <script>
+    /***********************
+     * IndexedDB persistence
+     ***********************/
     const DB_NAME = "toeic_recorder_db_task3";
     const DB_VERSION = 2;
     const STORE = "takes";
@@ -620,6 +626,9 @@
       });
     }
 
+    /***********************
+     * UI + Recorder
+     ***********************/
     const startBtn  = document.getElementById("start");
     const stopBtn   = document.getElementById("stop");
     const resetBtn  = document.getElementById("reset");
@@ -747,19 +756,7 @@
     function hideOverlay(){ overlay.style.display = "none"; }
 
     okBtn.addEventListener("click", hideOverlay);
-    overlay.addEventListener("click", (e) => {
-      if(e.target === overlay) hideOverlay();
-    });
-
-    function setDownloadEnabled(blob){
-      if(!blob){
-        downloadBtn.setAttribute("aria-disabled","true");
-        downloadBtn.href = "#";
-        return;
-      }
-      downloadBtn.setAttribute("aria-disabled","false");
-      downloadBtn.href = "#";
-    }
+    overlay.addEventListener("click", (e) => { if(e.target === overlay) hideOverlay(); });
 
     function renderSavedTake({ id, blob, durationSec, createdAt }, takeNumber){
       const savedUrl = URL.createObjectURL(blob);
@@ -835,14 +832,13 @@
       takes.forEach((t, idx) => savedList.appendChild(renderSavedTake(t, idx + 1)));
     }
 
+    // Init
     resetUI();
     loadSavedTakes().catch(() => {});
 
     startBtn.onclick = async () => {
       try{
         resetCurrentTakeUI();
-        setDownloadEnabled(null);
-
         chunks = [];
         statusEl.textContent = "Requesting microphone…";
 
@@ -885,7 +881,7 @@
           currentUrl = URL.createObjectURL(blob);
           player.src = currentUrl;
 
-          setDownloadEnabled(currentBlob);
+          downloadBtn.setAttribute("aria-disabled","false");
           keepBtn.disabled = false;
 
           stopMic();
@@ -923,7 +919,9 @@
 
     downloadBtn.addEventListener("click", (e) => {
       e.preventDefault();
+      if(downloadBtn.getAttribute("aria-disabled") === "true") return;
       if(!currentBlob) return;
+
       const filename = `task3-take-${new Date().toISOString().slice(0,19).replace(/[:T]/g,"-")}.webm`;
       downloadBlob(currentBlob, filename);
       statusEl.textContent = "Downloaded current take.";

@@ -7,7 +7,6 @@
 
   <style>
     :root{
-      /* Rise-like palette (same structure as Tasks 1 & 2) */
       --bg:#f6f7f9;
       --surface:#ffffff;
       --text:#111827;
@@ -23,17 +22,9 @@
       --soft:#f1f5f9;
       --softHover:#e5e7eb;
 
-      --dangerBg:#fee2e2;
-      --dangerText:#b91c1c;
-      --dangerBorder:#fecaca;
-
       --successBg:#dcfce7;
       --successText:#166534;
       --successBorder:#86efac;
-
-      --secondaryBg:#f1f5f9;
-      --secondaryText:#1e3a8a;
-      --secondaryBorder:#c7d2fe;
 
       --shadow:0 10px 26px rgba(17,24,39,.08);
       --radius:16px;
@@ -86,7 +77,7 @@
       border:1px solid var(--accentBorder);
       background: linear-gradient(0deg, rgba(231,240,255,.55), rgba(231,240,255,.55)), #fff;
       border-radius: var(--radius);
-      padding: 14px; /* compact (Task 2 style) */
+      padding: 14px;
       position: relative;
       overflow:hidden;
     }
@@ -136,7 +127,6 @@
     .state.recording .dot{ background:#ef4444; }
     .state.done .dot{ background:#16a34a; }
 
-    /* ✅ Hard lock spacing inside prompt (same fix as Task 2) */
     .promptInner p{ margin: 0; }
     .promptInner p + p{ margin-top: 6px; }
 
@@ -145,19 +135,6 @@
       font-size: 14px;
       line-height: 1.6;
       white-space: pre-wrap;
-    }
-
-    .audioPrompt{
-      margin-top: 6px;
-      border:1px solid var(--border);
-      border-radius: var(--radius);
-      background:#fff;
-      padding: 10px;
-    }
-    .audioPrompt .statusLine{
-      margin:0 0 6px;
-      color: var(--muted);
-      font-size: 13px;
     }
 
     .instruction{
@@ -170,7 +147,57 @@
       color:#1f3b7a;
     }
 
-    /* Controls */
+    /* --- Question blocks (grey label) --- */
+    .qBlock{
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px;
+      background:#fff;
+      margin-top: 8px;
+    }
+    .qHeader{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight: 500;
+      font-size: 13px;
+      margin: 0 0 8px;
+      color: #6b7280;
+    }
+    .qNum{
+      width: 24px;
+      height: 24px;
+      border-radius: 999px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      font-size:12px;
+      background: rgba(37,99,235,.10);
+      color: #1d4ed8;
+      border:1px solid rgba(37,99,235,.18);
+      flex: 0 0 auto;
+    }
+    .questionText{
+      margin: 10px 0 0;
+      font-size: 14px;
+      display:flex;
+      gap:8px;
+      align-items:flex-start;
+      color:#111827;
+      line-height: 1.6;
+    }
+    .questionIcon{
+      font-size:16px;
+      line-height:1.4;
+      flex: 0 0 auto;
+    }
+
+    audio{
+      width:100%;
+      border-radius: 12px;
+    }
+
+    /* Controls panel */
     .panel{
       margin-top: 14px;
       border:1px solid var(--border);
@@ -212,7 +239,9 @@
       display:flex;
       gap:10px;
       flex-wrap:wrap;
+      align-items:center;
     }
+
     button{
       border:0;
       border-radius: 12px;
@@ -229,12 +258,9 @@
     .btnPrimary{ background: var(--primary); color:#fff; }
     .btnPrimary:hover{ background: var(--primaryHover); }
 
-    .btnDanger{
-      background: var(--dangerBg);
-      color: var(--dangerText);
-      border:1px solid var(--dangerBorder);
-    }
-    .btnDanger:hover{ background: var(--dangerBorder); }
+    /* ✅ Stop button same as Writing (solid red) */
+    .btnDanger{ background:#ef4444; color:#fff; }
+    .btnDanger:hover{ background:#dc2626; }
 
     .btnNeutral{
       background: var(--soft);
@@ -250,21 +276,7 @@
     }
     .btnSuccess:hover{ background: #bbf7d0; }
 
-    .btnDownload{
-      background:#f8fafc;
-      color:#1f2937;
-      border:1px solid #cbd5e1;
-    }
-    .btnDownload:hover{ background:#eef2f7; }
-
-    .btnReturn{
-      background: var(--secondaryBg);
-      color: var(--secondaryText);
-      border:1px solid var(--secondaryBorder);
-      font-weight: 700;
-    }
-    .btnReturn:hover{ background:#e0e7ff; }
-
+    /* Player block */
     .audioBlock{
       margin-top: 12px;
       padding: 12px;
@@ -272,18 +284,44 @@
       border:1px solid var(--border);
       background:#fafafa;
     }
-    audio{
-      width:100%;
-      margin-top: 6px;
-      border-radius: 12px;
-    }
-    .actionsRow{
+
+    /* ✅ Bottom buttons like Writing (outline style) */
+    .bottomActions{
+      margin-top: 10px;
       display:flex;
       gap:10px;
       flex-wrap:wrap;
-      margin-top: 10px;
+      align-items:center;
     }
-    .actionsRow button{ flex: 1 1 240px; }
+    .btnOutline{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding: 11px 14px;
+      border-radius: 12px;
+      border:1px solid #cbd5e1;
+      background:#f8fafc;
+      color:#1f2937;
+      font-weight: 750;
+      font-size: 14px;
+      cursor:pointer;
+      text-decoration:none;
+      transition: background .15s ease, transform .02s ease, opacity .15s ease;
+    }
+    .btnOutline:hover{ background:#eef2f7; }
+    .btnOutline:active{ transform: translateY(1px); }
+    .btnOutline[aria-disabled="true"]{
+      opacity:.55;
+      cursor:not-allowed;
+      pointer-events:none;
+    }
+    .btnOutlineReturn{
+      border-color:#a5b4fc;
+      color:#1e3a8a;
+      background:#f1f5f9;
+    }
+    .btnOutlineReturn:hover{ background:#e0e7ff; }
 
     /* Saved takes */
     .saved{
@@ -401,51 +439,6 @@
       flex-wrap:wrap;
       justify-content:flex-end;
     }
-    /* --- Task 4-like Question block (for Task 3) --- */
-.qBlock{
-  border:1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 12px;
-  background:#fff;
-  margin-top: 8px;
-}
-/* Greyed question label (matches your other tasks) */
-.qHeader{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  font-weight: 500;   /* not bold */
-  font-size: 13px;
-  margin: 0 0 8px;
-  color: #6b7280;     /* grey label */
-}
-.qNum{
-  width: 24px;
-  height: 24px;
-  border-radius: 999px;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  font-size:12px;
-  background: rgba(37,99,235,.10);
-  color: #1d4ed8;
-  border:1px solid rgba(37,99,235,.18);
-  flex: 0 0 auto;
-}
-.questionText{
-  margin: 10px 0 0;
-  font-size: 14px;
-  display:flex;
-  gap:8px;
-  align-items:flex-start;
-  color:#111827;
-  line-height: 1.6;
-}
-.questionIcon{
-  font-size:16px;
-  line-height:1.4;
-  flex: 0 0 auto;
-}
   </style>
 </head>
 
@@ -459,7 +452,6 @@
     <div class="card">
       <div class="section">
 
-        <!-- Prompt -->
         <section class="prompt" id="promptBox" aria-labelledby="promptTitle">
           <div class="promptInner">
             <div class="promptHead">
@@ -469,53 +461,44 @@
                 <span id="stateText">Ready</span>
               </div>
             </div>
-            <br>
 
             <p class="promptText">Play the audio questions below. When you're ready, record your answers.</p>
-            <br>
 
             <div class="qBlock">
-    <div class="qHeader"><span class="qNum">1</span> Question 1</div>
-
+              <div class="qHeader"><span class="qNum">1</span> Question 1</div>
               <audio controls preload="metadata">
                 <source src="toeic-speaking-task-3_1.mp3" type="audio/mpeg" />
                 Your browser does not support the audio element.
               </audio>
-              <br>
-             <div class="questionText">
-                             <br>
-                  <span class="questionIcon" aria-hidden="true">💬</span>
-                  How long is your lunch break at work?
-                </div>
+              <div class="questionText">
+                <span class="questionIcon" aria-hidden="true">💬</span>
+                <span>How long is your lunch break at work?</span>
               </div>
+            </div>
 
             <div class="qBlock">
-    <div class="qHeader"><span class="qNum">2</span> Question 2</div>
+              <div class="qHeader"><span class="qNum">2</span> Question 2</div>
+              <audio controls preload="metadata">
+                <source src="toeic-speaking-task-3_2.mp3" type="audio/mpeg" />
+                Your browser does not support the audio element.
+              </audio>
+              <div class="questionText">
+                <span class="questionIcon" aria-hidden="true">💬</span>
+                <span>What do you usually during on lunch break?</span>
+              </div>
+            </div>
 
-    <audio controls preload="metadata">
-      <source src="toeic-speaking-task-3_2.mp3" type="audio/mpeg" />
-      Your browser does not support the audio element.
-    </audio>
-
-    <div class="questionText">
-      <span class="questionIcon" aria-hidden="true">💬</span>
-      <span>What do you usually during on lunch break?</span>
-    </div>
-  </div>
-
-  <div class="qBlock">
-    <div class="qHeader"><span class="qNum">3</span> Question 3</div>
-
-    <audio controls preload="metadata">
-      <source src="toeic-speaking-task-3_3.mp3" type="audio/mpeg" />
-      Your browser does not support the audio element.
-    </audio>
-
-    <div class="questionText">
-      <span class="questionIcon" aria-hidden="true">💬</span>
-      <span>What would you like to change about your lunch break routine?</span>
-    </div>
-  </div>
+            <div class="qBlock">
+              <div class="qHeader"><span class="qNum">3</span> Question 3</div>
+              <audio controls preload="metadata">
+                <source src="toeic-speaking-task-3_3.mp3" type="audio/mpeg" />
+                Your browser does not support the audio element.
+              </audio>
+              <div class="questionText">
+                <span class="questionIcon" aria-hidden="true">💬</span>
+                <span>What would you like to change about your lunch break routine?</span>
+              </div>
+            </div>
 
             <div class="instruction">
               ⚠️ You have <strong>3 seconds</strong> to prepare.
@@ -524,7 +507,6 @@
           </div>
         </section>
 
-        <!-- Controls -->
         <section class="panel" aria-label="Recording controls">
           <div class="metaRow">
             <div class="timerChip"><span class="timer" id="timer">00:00</span></div>
@@ -542,15 +524,15 @@
             <div class="statusLine">Listen to your take:</div>
             <audio id="player" controls></audio>
 
-            <div class="actionsRow">
-              <button id="download" class="btnDownload" disabled>⬇️ Download this take</button>
-              <button id="returnBtn" class="btnReturn">↩️ Return to the module</button>
+            <!-- ✅ Same as Writing -->
+            <div class="bottomActions">
+              <a id="downloadBtn" class="btnOutline" href="#" aria-disabled="true">⬇️ Download current take</a>
+              <a id="returnBtn" class="btnOutline btnOutlineReturn" href="#">↩️ Return to the module</a>
             </div>
           </div>
         </section>
       </div>
 
-      <!-- Saved takes -->
       <div class="saved">
         <div class="savedHead">
           <h3>Saved takes</h3>
@@ -561,7 +543,6 @@
     </div>
   </div>
 
-  <!-- Return modal -->
   <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <div class="modal">
       <h3 id="modalTitle">Return to the module</h3>
@@ -577,7 +558,7 @@
      * IndexedDB persistence
      ***********************/
     const DB_NAME = "toeic_recorder_db_task3";
-    const DB_VERSION = 1;
+    const DB_VERSION = 2; // ✅ store durationSec
     const STORE = "takes";
 
     function openDB(){
@@ -635,7 +616,8 @@
     const stopBtn   = document.getElementById("stop");
     const resetBtn  = document.getElementById("reset");
     const keepBtn   = document.getElementById("keep");
-    const dlBtn     = document.getElementById("download");
+
+    const downloadBtn = document.getElementById("downloadBtn");
     const returnBtn = document.getElementById("returnBtn");
 
     const player    = document.getElementById("player");
@@ -665,6 +647,13 @@
       const s = sec % 60;
       timerEl.textContent = `${pad(m)}:${pad(s)}`;
     }
+    function startTimer(){
+      if(timerInterval) return;
+      timerInterval = setInterval(() => {
+        seconds++;
+        setTimer(seconds);
+      }, 1000);
+    }
     function stopTimer(){
       if(timerInterval){
         clearInterval(timerInterval);
@@ -690,6 +679,11 @@
       }
     }
 
+    function fmtDuration(sec){
+      const s = Number.isFinite(sec) ? sec : 0;
+      return `${Math.max(0, Math.round(s))}s`;
+    }
+
     function resetCurrentTakeUI(){
       currentBlob = null;
       if(currentUrl){
@@ -698,7 +692,11 @@
       }
       player.removeAttribute("src");
       player.load();
-      dlBtn.disabled = true;
+
+      downloadBtn.setAttribute("aria-disabled","true");
+      downloadBtn.removeAttribute("download");
+      downloadBtn.href = "#";
+
       keepBtn.disabled = true;
       resetBtn.disabled = true;
     }
@@ -709,8 +707,10 @@
       setTimer(0);
       statusEl.textContent = "Ready";
       setState("ready");
+
       startBtn.disabled = false;
       stopBtn.disabled = true;
+
       chunks = [];
       resetCurrentTakeUI();
     }
@@ -744,7 +744,18 @@
       if(e.target === overlay) hideOverlay();
     });
 
-    function renderSavedTake({ id, blob, durationSec }, takeNumber){
+    function setDownloadEnabled(blob){
+      if(!blob){
+        downloadBtn.setAttribute("aria-disabled","true");
+        downloadBtn.href = "#";
+        return;
+      }
+      downloadBtn.setAttribute("aria-disabled","false");
+      // keep href dummy; we handle click with blob download for consistent filenames
+      downloadBtn.href = "#";
+    }
+
+    function renderSavedTake({ id, blob, durationSec, createdAt }, takeNumber){
       const savedUrl = URL.createObjectURL(blob);
 
       const item = document.createElement("div");
@@ -756,16 +767,50 @@
 
       const label = document.createElement("div");
       label.className = "savedLabel";
-      label.innerHTML = `<strong>Take ${takeNumber}</strong> <span class="tag">• ${durationSec}s</span>`;
+
+      const savedWhen = createdAt ? new Date(createdAt).toLocaleString() : "";
+      const dur = fmtDuration(durationSec);
+
+      // ✅ Like Writing: duration + saved date/time
+      label.innerHTML =
+        `<strong>Take ${takeNumber}</strong> ` +
+        `<span class="tag">• ${dur}${savedWhen ? ` • saved ${savedWhen}` : ""}</span>`;
 
       const actions = document.createElement("div");
       actions.className = "savedActions";
 
-      const downloadBtn = document.createElement("a");
-      downloadBtn.className = "linkBtn";
-      downloadBtn.href = savedUrl;
-      downloadBtn.download = `task3-take-${takeNumber}.webm`;
-      downloadBtn.textContent = "⬇️ Download";
+      // (Optional but useful) Restore
+      const restoreBtn = document.createElement("a");
+      restoreBtn.href = "#";
+      restoreBtn.className = "linkBtn";
+      restoreBtn.textContent = "↩️ Restore";
+      restoreBtn.onclick = (e) => {
+        e.preventDefault();
+
+        // Put it in the main player + enable download
+        if(currentUrl) URL.revokeObjectURL(currentUrl);
+        currentUrl = URL.createObjectURL(blob);
+        currentBlob = blob;
+        player.src = currentUrl;
+
+        // show the saved duration in the timer (not running)
+        stopTimer();
+        seconds = Number.isFinite(durationSec) ? durationSec : 0;
+        setTimer(seconds);
+
+        setDownloadEnabled(currentBlob);
+        keepBtn.disabled = true;   // already saved
+        resetBtn.disabled = false;
+
+        statusEl.textContent = `Take ${takeNumber} restored.`;
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      };
+
+      const downloadA = document.createElement("a");
+      downloadA.className = "linkBtn";
+      downloadA.href = savedUrl;
+      downloadA.download = `task3-take-${takeNumber}.webm`;
+      downloadA.textContent = "⬇️ Download";
 
       const removeBtn = document.createElement("a");
       removeBtn.href = "#";
@@ -777,10 +822,11 @@
         URL.revokeObjectURL(savedUrl);
         item.remove();
         statusEl.textContent = "Take removed.";
-        await loadSavedTakes(); // renumber
+        await loadSavedTakes(); // renumber + empty message
       };
 
-      actions.appendChild(downloadBtn);
+      actions.appendChild(restoreBtn);
+      actions.appendChild(downloadA);
       actions.appendChild(removeBtn);
 
       top.appendChild(label);
@@ -799,7 +845,17 @@
     async function loadSavedTakes(){
       savedList.innerHTML = "";
       const takes = await getAllTakesFromDB();
-      takes.sort((a,b) => a.createdAt - b.createdAt); // Take 1 at top
+      takes.sort((a,b) => (a.createdAt || 0) - (b.createdAt || 0));
+
+      // ✅ Like Writing: empty message
+      if(takes.length === 0){
+        const empty = document.createElement("div");
+        empty.className = "statusLine";
+        empty.textContent = "No takes saved yet.";
+        savedList.appendChild(empty);
+        return;
+      }
+
       takes.forEach((t, idx) => savedList.appendChild(renderSavedTake(t, idx + 1)));
     }
 
@@ -810,6 +866,8 @@
     startBtn.onclick = async () => {
       try{
         resetCurrentTakeUI();
+        setDownloadEnabled(null);
+
         chunks = [];
         statusEl.textContent = "Requesting microphone…";
 
@@ -821,16 +879,14 @@
         mediaRecorder.onstart = () => {
           statusEl.textContent = "Recording…";
           setState("recording");
+
           startBtn.disabled = true;
           stopBtn.disabled = false;
 
           seconds = 0;
           setTimer(0);
           stopTimer();
-          timerInterval = setInterval(() => {
-            seconds++;
-            setTimer(seconds);
-          }, 1000);
+          startTimer();
         };
 
         mediaRecorder.ondataavailable = (e) => {
@@ -839,6 +895,7 @@
 
         mediaRecorder.onstop = () => {
           stopTimer();
+
           stopBtn.disabled = true;
           startBtn.disabled = false;
 
@@ -849,10 +906,11 @@
           const blob = new Blob(chunks, { type: mediaRecorder.mimeType || "audio/webm" });
           currentBlob = blob;
 
+          if(currentUrl) URL.revokeObjectURL(currentUrl);
           currentUrl = URL.createObjectURL(blob);
           player.src = currentUrl;
 
-          dlBtn.disabled = false;
+          setDownloadEnabled(currentBlob);
           keepBtn.disabled = false;
 
           stopMic();
@@ -864,7 +922,7 @@
         stopTimer();
         stopMic();
         statusEl.textContent = "Microphone blocked or not available";
-        alert("Microphone access is blocked. Please allow microphone permission (lock icon) and reload the page.");
+        alert("Microphone access is blocked. Please allow microphone permission and reload the page.");
       }
     };
 
@@ -888,11 +946,14 @@
 
     resetBtn.onclick = () => resetUI();
 
-    dlBtn.onclick = () => {
+    // ✅ Outline "Download current take"
+    downloadBtn.addEventListener("click", (e) => {
+      e.preventDefault();
       if(!currentBlob) return;
       const filename = `task3-take-${new Date().toISOString().slice(0,19).replace(/[:T]/g,"-")}.webm`;
       downloadBlob(currentBlob, filename);
-    };
+      statusEl.textContent = "Downloaded current take.";
+    });
 
     returnBtn.addEventListener("click", (e) => {
       e.preventDefault();
@@ -913,8 +974,9 @@
         await addTakeToDB({ blob: currentBlob, durationSec: seconds });
         await loadSavedTakes();
 
-        statusEl.textContent = "Take saved on this device.";
+        statusEl.textContent = "Take saved. Click Start recording for a new attempt, or restore another take.";
         keepBtn.disabled = true;
+        setState("done");
       } catch(err){
         console.error(err);
         statusEl.textContent = "Save failed.";
@@ -924,4 +986,3 @@
   </script>
 </body>
 </html>
-

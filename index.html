@@ -285,14 +285,17 @@
       background:#fafafa;
     }
 
-    /* Bottom buttons like Writing (outline style) */
-    .bottomActions{
-      margin-top: 10px;
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      align-items:center;
-    }
+    /* Bottom buttons: Download left, Return pushed to far right */
+.bottomActions{
+  margin-top: 10px;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  align-items:center;
+}
+.bottomActions .btnOutlineReturn{
+  margin-left: auto;   /* ✅ pushes it to the far right */
+}
     .btnOutline{
       display:inline-flex;
       align-items:center;
